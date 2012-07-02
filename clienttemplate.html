@@ -1,0 +1,675 @@
+
+<div id="statscol">
+  stats!
+
+<div id="statsbar">
+  {{if user.image {{
+    {{<img width="100" height="100"> mod="src:user.image"}}<br />
+  }}}}
+
+  Skills
+  <div class="skillentry">
+    <div class="skilldesc">
+      <div class="skillname">Baking</div>
+      <div class="skilllvl">{{user.stats.baker}}</div>
+    </div>
+    <div class="skillxpbar">
+      <div class="skillxptxt">
+        {{user.stats.baker_xp}}/1000xp
+      </div>
+    </div>
+  </div>
+  <div class="skillentry">
+    <div class="skilldesc">
+      <div class="skillname">Engineering</div>
+      <div class="skilllvl">{{user.stats.engineer}}</div>
+    </div>
+    <div class="skillxpbar">
+      <div class="skillxptxt">
+        {{user.stats.engineer_xp}}/1000xp
+      </div>
+    </div>
+  </div>
+  <div class="skillentry">
+    <div class="skilldesc">
+      <div class="skillname">Farming</div>
+      <div class="skilllvl">{{user.stats.farmer}}</div>
+    </div>
+    <div class="skillxpbar">
+      <div class="skillxptxt">
+        {{user.stats.farmer_xp}}/1000xp
+      </div>
+    </div>
+  </div>
+  <div class="skillentry">
+    <div class="skilldesc">
+      <div class="skillname">Gemcraft</div>
+      <div class="skilllvl">{{user.stats.gemcrafter}}</div>
+    </div>
+    <div class="skillxpbar">
+      <div class="skillxptxt">
+        {{user.stats.gemcrafter_xp}}/1000xp
+      </div>
+    </div>
+  </div>
+  <div class="skillentry">
+    <div class="skilldesc">
+      <div class="skillname">Tailoring</div>
+      <div class="skilllvl">{{user.stats.tailor}}</div>
+    </div>
+    <div class="skillxpbar">
+      <div class="skillxptxt">
+        {{user.stats.tailor_xp}}/1000xp
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div id="leftcol">
+  <button onclick="intradingpost=true;templ.update()">
+    Trading Post
+  </button><br />
+  <button onclick="opendeckbuilder();">
+    Deck Builder
+  </button><br />
+  <button onclick="open_questboard()">
+    Quest Board
+  </button><br />
+  <button onclick="startfight();">
+    test fight
+  </button><br />
+  
+<div id="jobadder">
+  Queue a job:<br />
+  <div id="skilljobpicker">
+  {{ for sj in skilljoblist {{
+    <div class="skilljobicon">
+    {{sj.skillname}}
+    </div>
+  }}}}
+  {{ for sj in skilljoblist {{
+    {{<div class="jobpicker"> for j in sj.joblist
+      <div class="jobicon">{{
+      {{j.kind}}
+    }}}}
+  }}}}
+  </div>
+  {{if possiblejob
+  <div style="float: left; background-color: #ddf;">{{
+
+    <form id="jobform" onsubmit="return submit_job();">
+    {{<input id="jobformdesc" type="hidden"> mod="value:possiblejob.kind"}}
+    {{if !craftbox {{
+      <div style="float: right;">
+        <div style="float: right;"><button onclick="$('.jobicon').removeClass('jobiconchosen'); possiblejob = null; templ.update(); return false;">Close</button></div>
+
+        <br /><br />
+        Quality probabilities:<br />
+        <div class="qualpct">
+          {{<div class="qualpctbar"> style="width:possiblejob.qualpct.0"}}
+          <div class="qualpctdesc">standard</div>
+        </div>
+        <div class="qualpct">
+          {{<div class="qualpctbar"> style="width:possiblejob.qualpct.1"}}
+          <div class="qualpctdesc">good</div>
+        </div>
+        <div class="qualpct">
+          {{<div class="qualpctbar"> style="width:possiblejob.qualpct.2"}}
+          <div class="qualpctdesc">exceptional</div>
+        </div>
+        <div class="qualpct">
+          {{<div class="qualpctbar"> style="width:possiblejob.qualpct.3"}}
+          <div class="qualpctdesc">legendary</div>
+        </div>
+      </div>
+      {{if possiblejob.inputtime {{
+        {{possiblejob.verb}} for
+        <input id="jobformleft" style="width: 60px" value="10" />
+        seconds.<br />
+      }}}}    
+      {{if !possiblejob.inputtime {{
+        <input id="jobformleft" type="hidden" value="0" />
+        {{possiblejob.verb}}
+        <input id="jobformnum" size="3" value="1" />
+        {{if  jobform_output_desc{{
+          {{jobform_output_desc}}}}}}{{if !jobform_output_desc{{
+          {{possiblejob.outputs.0.desc}}}}}},
+        taking {{jobform_output_seconds}} seconds.
+        <br />
+      }}}}
+    }}}}
+    {{if craftbox {{
+      <div style="float: right;"><button onclick="$('.jobicon').removeClass('jobiconchosen'); possiblejob = null; templ.update(); return false;">Close</button></div>
+      <p>Place ingredients into the workspace from your inventory.</p>
+      <p>Every job will need
+      {{for item in possiblejob.inputs {{
+        {{item.quantity}} {{item.desc}}}}}}.</p>
+      <p>With the amount in the workspace currently, you will make {{craftbox.craftcount}} [jobs], taking {{craftbox.crafttime}} seconds.</p>
+      <select id="craftquality" name="craftquality">
+        <option id="craftquality0" value="0" style="color:black;">basic</option>
+        <option id="craftquality1" value="1" style="color:black;">great</option>
+        <option id="craftquality2" value="2" style="color:black;">exceptional</option>
+        <option id="craftquality3" value="3" style="color:black;">legendary</option>
+      </select>
+    }}}}
+    <input type="submit" value="submit job" /><br />
+    </form>
+
+    {{if craftbox {{
+      <div style="float: left; width: 100%;">Workspace:</div>
+      <div class="inventory" style="height: 100px; width: 300px; overflow-y: scroll;">
+      {{for basetype in craftbox.worbases {{
+        {{for item in basetype <div class="invitem">{{
+          <div class="invname">
+            {{item.QDesc}}
+          </div>
+          <div class="invquant">
+            {{item.quantity}}
+          </div>
+          <div class="invmisc">
+            <button class="craftboxdel1" style="border-style: none">
+              -1
+            </button>
+          </div>
+        }}}}
+      }}}}
+      </div>
+      <div style="float: left; width: 100%;">Inventory:</div>
+      <div class="inventory" style="height: 150px; width: 300px; overflow-y: scroll;">
+      {{for basetype in craftbox.invbases {{
+        <div class="invbase">
+          {{basetype.0.Plural}}
+        </div>
+        {{for item in basetype <div class="invitem">{{
+          <div class="invname">
+            {{item.QDesc}}
+          </div>
+          <div class="invquant">
+            {{item.quantity}}
+          </div>
+          <div class="invmisc">
+            <button class="craftboxadd1" style="border-style: none">+1</button>
+          </div>
+        }}}}
+      }}}}
+      </div>
+    }}}}
+  }}}}
+</div>
+
+<div id="maininventory">
+  Inventory <br />
+  Bits: {{user.bits}}<br /><br />
+  
+  <div class="inventory">
+  {{for basetype in user.invbases {{
+    {{if basetype.length {{
+      <div class="invbase">
+        {{basetype.0.Plural}}
+      </div>
+      {{for item in basetype <div class="invitem">{{
+        <div class="invname">
+          {{item.QDesc}}
+        </div>
+        <div class="invquant">
+          {{item.quantity}}
+        </div>
+        <div class="invmisc"></div>
+      }}}}
+    }}}}
+  }}}}
+  </div>
+  
+  <br />
+</div>
+
+
+</div><!--/leftcol-->
+
+<div id="rightcol">
+
+{{<div id="joblist"> for j in user.jobs <div class="job">{{
+  <div class="jobdesc"> {{j.kind}} </div>
+  <div class="jobleft"> {{j.leftstr}} </div>
+  <div class="jobbar">
+    {{<div class="injobbar"> style="width:j.percentdonestr"}}
+  </div>
+  <div>
+    <button class="jobup">move up</button>
+    <button class="jobdown">move down</button>
+    <button class="jobcancel">cancel</button>
+  </div>
+}}}}
+
+
+
+<div style="float: left; background-color: #eee; width: 220px;">
+  My little active quests
+  {{for q in user.flatactivequests{{
+    <div style="float: left; background-color: #ffd; width: 200px; margin: 10px;">
+      {{q.desc}}
+      <button class="questinfo" type="button">Info</button>
+      <button class="questturnin" type="button">Turn in</button>
+      <button class="questcancel" type="button">Cancel</button>
+      <br />
+      {{q.mdesc}}
+    </div>
+  }}}}
+</div>
+
+<div style="float:right">
+<form id="uploadform" action="upload" method="post"
+  enctype="multipart/form-data">
+  {{<input type="hidden" name="username"> mod="value:user._id"}}
+  {{<input type="hidden" name="authtoken"> mod="value:authtoken"}}
+  <input type="file" name="datafile" /><br />
+  <input type="submit" value="Send" /><br />
+</form>
+</div>
+
+</div><!--/rightcol-->
+
+
+
+{{if questboard {{
+<div id="questboard" class="overlay"
+  style="width: 600px; height: 400px;
+         margin-left: -250px; margin-top: -200px;
+         z-index: 2;">
+  <div style="width: 100%; height: 30px; overflow: hidden;">
+    Available Quests
+    <button onclick="close_questboard()">Close</button>
+  </div>
+  <div style="float: left; width: 300px; height: 370px; overflow-y: scroll;">
+    {{for quest in questboard.questlist{{
+    <div class="">
+      {{<button class="questlistbutton"> quest.desc}}
+    </div>
+    }}}}
+  </div>
+  <div style="float: left; width: 300px; height: 370px;">
+    {{if questboard.viewquest{{
+      <div style="width: 300px; height: 340px; overflow-y: scroll;">
+        {{questboard.viewquest.ldesc}}
+      </div>
+      <div style="width: 300px; height: 30px; overflow: hidden;">
+        <button id="viewquestaccept">Accept Quest</button>
+      </div>
+    }}}}
+  </div>
+</div>
+}}}}
+
+{{if dialog {{
+<div id="dialogframe" class="overlay"
+  style="width: 500px; height: 400px;
+         margin-left: -250px; margin-top: -200px;
+         z-index: 5;
+         -moz-background-size:100% 100%;
+         background-size:100% 100%;
+         background-repeat:no-repeat;">
+  <div id="dialogtext" style="">
+    {{dialog.text}}
+  </div>
+  <div id="dialogoptions">
+    {{for option in dialog.options{{
+    <div class="dialogoptiondiv">
+      {{<button class="dialogoptionbutton"> option}}
+    </div>
+    }}}}
+  </div>
+</div>
+}}}}
+
+
+{{if indeckbuilder {{
+<div id="deckbuilderframe" class="overlay"
+  style="width: 550px; height: 420px;
+         margin-left: -275px; margin-top: -210px;
+         z-index: 3;">
+  <div id="deckheader" style="float: left; width: 550px; height: 24px;">
+    Deck builder
+    <div style="float: right;">
+      <button onclick="closedeckbuilder()">
+        Close
+      </button>
+    </div>
+  </div>
+  <div id="decklist" style="float: left; width: 100px; height: 400px;">
+    {{if !deckbuilder.deckcur{{
+    Decks<br />
+    {{for deck in deckbuilder.decklist{{
+    <button class="deckpickbutton">
+      {{deck.name}}
+    </button><br />
+    }}}}
+    <br />
+    
+    <form id="newdeckform" action="."
+        onsubmit="deckbuilder.newdeckform(); return false;">
+    <input id="newdeckname" type="text" />
+    <input type="submit" value="New Deck" />
+    </form>
+    
+    }}}}
+    {{if deckbuilder.deckcur{{
+    <button onclick="deckbuilder.savechanges()">
+      Save Changes!
+    </button>
+    <button onclick="deckbuilder.cancelchanges()">
+      Cancel Changes!
+    </button>
+    <br />
+    }}}}
+  </div>
+  <div id="deckinvcards" style="float: left; width: 150px; height: 400px; overflow-y: scroll;">
+    Inventory<br />
+    {{for card in deckbuilder.invlist {{
+    <div class="carditem invcard">
+      {{card.base}}<br />
+      {{card.quantity}}
+      <button class="deckaddbutton">
+        add
+      </button>
+    </div>
+    }}}}
+  </div>
+  <div id="deckshowcard" style="float: left; width: 150px; height: 400px;">
+    Details
+  </div>
+  <div id="deckcards" style="float: left; width: 150px; height: 400px; overflow-y: scroll;">
+    Cards in Deck
+    {{for card in deckbuilder.deckcardlist{{
+    <div class="carditem deckcard">
+      {{card.base}}<br />
+      {{card.quantity}}
+      <button class="deckremovebutton">
+        remove
+      </button>
+    </div>
+    }}}}
+  </div>
+</div>
+}}}}
+
+{{if intradingpost {{
+<div id="tradingpostframe" class="overlay"
+  style="width: 500px; height: 400px;
+         margin-left: -250px; margin-top: -200px;
+         z-index: 2;">
+  <div style="float: left; width: 200px; background-color: #eef; height: 400px; overflow-y: auto;">
+    <button onclick="intradingpost=false; templ.update()">
+    Close</button><br />
+    {{<div>for h in trading_hierarchy_html <div>{{
+      {{<div>h}}
+    }}}}
+  </div>
+
+  {{if tradingitem{{
+  <div style="float: right; width: 300px; background-color: #efe;">
+    <div style="width: 300px; float: left;">
+      <div style="float: right;">
+        <button onclick="refresh_market()">refresh</button>
+      </div>
+      {{tradingitem.title}}
+    </div>
+    <div style="float: left;">
+      <table class="ordertable"><tr>
+        <td class="orderbits">Bits</td>
+        <td class="ordernum">Quantity</td>
+      </tr></table>
+    </div>
+    <div style="float: right;">Sellers</div>
+    <div style="width: 300px; height: 100px; background-color: #fff; overflow-y: scroll;">
+      {{<table class="ordertable"> for order in tradingitem.sellorders <tr>{{
+        <td class="orderbits">{{order.bitseach}}</td>
+        <td class="ordernum">{{order.quantity}}</td>
+      }}}}
+    </div>
+    <div style="float: left;">
+      <table class="ordertable"><tr>
+        <td class="orderbits">Bits</td>
+        <td class="ordernum">Quantity</td>
+      </tr></table>
+    </div>
+    <div style="float: right">Buyers</div>
+    <div style="width: 300px; height: 100px; background-color: #fff; overflow-y: scroll;">
+      {{<table class="ordertable"> for order in tradingitem.buyorders <tr>{{
+        <td class="orderbits">{{order.bitseach}}</td>
+        <td class="ordernum">{{order.quantity}}</td>
+      }}}}
+    </div>
+  </div>
+  
+  <div id="buysell" class="tabbed"
+    style="float: right; width: 300px; background-color: #fee">
+    <ul class="tablist">
+      <li class="t1">
+        <button onclick="$('#buysell').attr('class','tabbed')">
+          Buy Immediately
+        </button>
+      </li>
+      <li class="t2">
+        <button onclick="$('#buysell').attr('class','tabbed2')">
+          Place Buy Order
+        </button>
+      </li>
+      <br />
+      <li class="t3">
+        <button onclick="$('#buysell').attr('class','tabbed3')">
+          Sell Immediately
+        </button>
+      </li>
+      <li class="t4">
+        <button onclick="$('#buysell').attr('class','tabbed4')">
+          Place Sell Order
+        </button>
+      </li>
+    </ul>
+    
+    <div class="t1">
+      <form id="newbuyform">
+      Quickly buy
+      <input type="text" size="5" id="newbuyquantity" />
+      {{tradingitem.item.plural}}, costing approximately
+      {{tradingbuyvalue}} bits.
+      </form>
+      <button type="button" onclick="submitbuy()">Buy! Buy! Buy!</button>
+    </div>
+    <div class="t2">
+      <form id="newbuyorderform">
+      Place an order to buy
+      <input type="text" size="5" id="newbuyorderquantity" />
+      {{tradingitem.item.plural}} at
+      <input type="text" size="5" id="newbuyorderbitseach" />
+      bits each, for a total of {{tradingordercost}} bits.
+      </form>
+      <button type="button" onclick="submitbuyorder()">Place order</button>
+    </div>
+    <div class="t3">
+      <form id="newsellform">
+      Quickly sell
+      <input type="text" size="5" id="newsellquantity" />
+      {{tradingitem.item.plural}}, earning approximately
+      {{tradingsellvalue}} bits.
+      </form>
+      <button type="button" onclick="submitsell()">Sell! Sell! Sell!</button>
+    </div>
+    <div class="t4">
+      <form id="newsellorderform">
+      Place an order to sell
+      <input type="text" size="5" id="newsellorderquantity" />
+      {{tradingitem.item.plural}} at
+      <input type="text" size="5" id="newsellorderbitseach" />
+      bits each, for a total of {{tradingorderrevenue}} bits.
+      </form>
+      <button type="button" onclick="submitsellorder()">Place order</button>
+    </div>
+  </div>
+  }}}}
+</div>
+}}}}
+
+{{if fight {{
+<div id="fightbackdrop"
+  style="position: absolute; left: 0px; top: 0px; z-index: 98;
+         background-color: black;">
+</div>
+<div id="fightframe"
+  style="position: absolute; left: 0px; top: 0px; z-index: 100;
+         background-color:rgba(0,0,0,0);">
+</div>
+<div id="fightplayerstats"
+  style="position: absolute; left: 0px; top: 0px; z-index: 100;
+         float: left; background-color: blue; width: 300px;">
+  <button onclick="endfight()">
+  end fight
+  </button>
+  HP<br />
+  <div style="width: 100px; height: 10px; background-color: black">
+    <div style="width: 80px; height: 10px; background-color: red"></div>
+  </div>
+  AP<br />
+  <div style="width: 100px; height: 10px; background-color: black">
+    <div style="width: 80px; height: 10px; background-color: green"></div>
+  </div>
+  <div id="fightcardlist">
+    <div id="card0">
+      card 0
+    </div>
+    <div id="card0">
+      card 1
+    </div>
+  </div>
+
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  blah blah blah<br />
+  <!--
+  <div id="playerinfo"
+    style="float: left; width: 100%; height: 200px;
+           background-color:rgba(0,0,0,0.2);">
+    <div id="fightplayerstats"
+      style="float: left; height: 200px; width: 100px;
+      background-color: blue; overflow: hidden;">
+      <div style="margin-top: 50px; margin-left: 20px;">
+        blah blah blah<br />
+        <div style="width: 80px; height: 5px; background-color: red"></div>
+        <div style="width: 80px; height: 5px; background-color: green"></div>
+      </div>
+    </div>
+    <div id="cardlist"
+      style="float: left; height: 200px; width: 400px;">
+      <div id="card0" class="fightcard">
+      </div>
+      <div id="card1" class="fightcard">
+      </div>
+      <div id="card2" class="fightcard">
+      </div>
+    </div>
+  </div>
+  -->
+</div>
+<div id="fightcanvcontainer"
+  style="position: absolute; left: 0px; top: 0px; z-index: 99;">
+  <canvas id="fightcanv" width="500" height="400">
+  </canvas>
+</div>
+}}}}
+
+
+
+{{if !user {{
+  {{if !registering {{
+  <div class="overlay">
+  <form id="loginform" action="." onsubmit="login(); return false;">
+    <div style="float: left; width: 100%; margin: 0; padding: 0;">
+      <table>
+        <tr>
+          <td>Username:</td>
+          <td><input id="usernameinput" type="text" /></td>
+        </tr>
+        <tr>
+          <td>Password:</td>
+          <td><input id="passwordinput" type="password" /></td>
+        </tr>
+      </table>
+    </div>
+    
+    <div style="float: left; width: 100%;">
+      <input type="submit" value="login" />
+      or, <a href="#" onclick="registering=true;templ.update();">register</a>
+    </div>
+  </form>
+  </div>
+  }}}}
+
+  
+  {{if registering {{
+  <div class="overlay" style="height: 200px; margin-top: -100px;">
+  <form id="registerform" action="." onsubmit="register(); return false;">
+    <div style="float: left; width: 100%; margin: 0; padding: 0;">
+      <table>
+        <tr>
+          <td style="text-align: right;">Username:</td>
+          <td><input id="usernameinput" type="text" /></td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">Password:</td>
+          <td><input id="passwordinput" type="password" /></td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">Password:<br />(again)</td>
+          <td><input id="passwordinput2" type="password" /></td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">Specialty</td>
+          <td>
+            <select id="specialtyform">
+              <option value="baker">Baker</option>
+              <option value="tailor">Tailor</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: right;">Pony Type</td>
+          <td>
+            <select id="ponytypeform">
+              <option value="earth">Earth Pony</option>
+              <option value="pegasus">Pegasus Pony</option>
+              <option value="unicorn">Unicorn Pony</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div style="float: left; width: 100%;">
+      <input type="submit" value="register" />
+      or, <a href="#" onclick="registering=false;templ.update();">login</a>
+    </div>
+    <div style="float: left; width: 100%;">
+      (note that tailoring isn't implemented at all yet)
+    </div>
+  </form>
+  </div>
+  }}}}
+  
+  <div style="float: left; width: 32px;">
+    {{if login_form_thinking {{
+      {{<img> mod="src=imagedir.processing"}}
+    }}}}
+  </div>
+
+
+}}}}
+

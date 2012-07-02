@@ -1,0 +1,1 @@
+convert icon.png -strip -resize 16x16 -colors 8 -strip favicon.ico

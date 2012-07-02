@@ -1,0 +1,433 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+/******************************
+*/
+
+
+html {overflow-y: scroll;}
+body {
+  background-color: #fff;
+}
+body, button{
+  font-family: Arial,'DejaVu Sans','Liberation Sans',Freesans,sans-serif;
+  font-size: 14px;
+}
+#wrap {
+width:760px;
+margin:0 auto;
+}
+#statscol{
+  float: left;
+  width: 100px;
+  padding: 10px;
+  background-color: #eee;
+}
+#leftcol { 
+  float: left;
+  width: 320px;
+}
+#rightcol {
+  float: left;
+  width: 320px;
+}
+#jobadder {
+  background-color: #fdd;
+  float: left;
+  width: 300px;
+  padding: 10px;
+}
+#maininventory{ 
+  background-color: #dfd;
+  width: 300px;
+  float: left;
+  padding: 10px;
+}
+
+.skillentry{
+  width: 100px;
+}
+.skilldesc{
+  width: 100px;
+  height: 20px;
+}
+.skillname{
+  float: left;
+  width: 80px;
+}
+.skilllvl{
+  float: right;
+  width: 20px;
+  text-align: right;
+}
+.skillxpbar{
+  width: 100px;
+  height: 20px;
+}
+.skillxptxt{
+  width: 100px;
+  text-align: center;
+}
+
+.skilljobicon{
+  float:left;
+  background-color: #faa;
+  margin: 5px;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+}
+.skilljobiconchosen{
+  border-style: dotted;
+}
+.jobpicker {
+  display: none;
+  width: 300px;
+  float: left;
+  background-color: #fff;
+}
+.jobicon{
+  float:left;
+  background-color: #f00;
+  margin: 5px;
+  border-style: solid;
+  border-width: 2px;
+  cursor: pointer;
+}
+.jobiconchosen{
+  border-style: dotted;
+}
+
+.qualpct{
+  height: 20px;
+  width: 100px;
+  background-color: #aaa;
+  margin-top: 2px;
+}
+.qualpctbar{
+  height: 20px;
+  position: absolute;
+  background-color: blue;
+}
+.qualpctdesc{
+  position: absolute;
+  width: 100px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: white;
+}
+
+
+#joblist {
+  background-color: #ddf;
+  float: right;
+  width: 320px;
+}
+.job {
+  width: 300px;
+  height: 60px;
+  background-color: #ffffff;
+  border-style: solid;
+  border-width: 1px;
+  margin: 9px;
+}
+
+.jobdesc {
+  width: 200px;
+  float: left;
+}
+.jobleft {
+  width: 100px;
+  float: right;
+  text-align: right;
+  font-family: monospace;
+}
+.jobbar{
+  float: left;
+  background-color: #00f;
+  margin-left: 48px;
+  margin-right: 48px;
+  width: 200px;
+  height: 6px;
+  overflow: hidden;
+  border-style: solid;
+  border-width: 2px;
+}
+.injobbar{
+  background-color: #0f0;
+  height: 6px;
+  width: 0%;
+}
+
+#usernameinput, #passwordinput{
+  width: 150px;
+}
+
+
+.ordertable{  }
+.orderbits{
+  width: 40px;
+  text-align: right;
+}
+.ordernum{
+  width: 60px;
+  text-align: right;
+}
+
+.hierarchy{
+  margin-left: 3px;
+  margin-bottom: 5px;
+  border-left-style: solid;
+  border-left-width: 3px;
+}
+
+.hidethechildren .hierarchy{
+  display: none;
+}
+
+.hierarchy button{
+  text-align: left;
+  border-style: none;
+}
+
+.inventory{
+  background-color: #ffd;
+  float: left;
+  width: 300px;
+}
+.invbase {
+  background-color: #ffd;
+  float: left;
+  width: 85%;
+  text-align: right;
+}
+.invitem {
+  background-color: #ddd;
+  float: left;
+  width: 100%;
+}
+.invname {
+  float: left;
+  width: 180px;
+  text-align: right;
+}
+.invquant {
+  float: left;
+  width: 50px;
+  text-align: right;
+}
+.invmisc {
+  float: left;
+  width: 50px;
+  overflow: hidden;
+}
+
+.bgcanv{
+  z-index: -10;
+}
+
+.questinfo{
+  border-style: none;
+}
+.questturnin{
+  border-style: none;
+}
+.questcancel{
+  border-style: none;
+}
+
+
+#dialogtext{
+  width: 410px;
+  padding: 13px;
+  margin: 30px;
+  margin-bottom: 0px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  background-color:rgba(0,0,0,0.2);
+  color: white;
+  font-size: 200%;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  overflow: auto;
+  font-size: 24px;
+}
+#dialogoptions{
+  width: 410px;
+  height: 110px;
+  padding: 13px;
+  margin: 30px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  background-color:rgba(0,0,0,0.2);
+  color: white;
+  font-size: 24px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  overflow: auto;
+}
+.dialogoptiondiv{
+  background-color: rgba(0,0,0,0);
+}
+.dialogoptionbutton{
+  color: white;
+  font-size: 24px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  border-style:none;
+  background-color:rgba(0,0,0,0);
+  text-align: left;
+}
+
+.fightcard{
+  float: left;
+  width: 80px;
+  height: 80px;
+  background-color: #aa7;
+  margin-left: 10px;
+  margin-top: 110px;
+}
+
+
+
+
+
+.backhidden {
+	z-index: -1000;
+	visibility:hidden;
+}
+
+.superhidden {
+		z-index: -1000;
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		top: 0;
+}
+
+
+.overlay {
+	background-color: #eee;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 250px;
+	height: 120px;
+	margin-left: -125px;
+	margin-top: -60px;
+	z-index: 1;
+}
+
+.box100 {
+	width: 100px;
+	height: 100px;
+	background-color: yellow;
+}
+
+
+.trans50 {
+	filter:alpha(opacity=50);
+	-moz-opacity:0.5;
+	-khtml-opacity: 0.5;
+	opacity: 0.5;
+}
+.trans60 {
+	filter:alpha(opacity=60);
+	-moz-opacity:0.6;
+	-khtml-opacity: 0.6;
+	opacity: 0.6;
+}
+.trans70 {
+	filter:alpha(opacity=70);
+	-moz-opacity:0.7;
+	-khtml-opacity: 0.7;
+	opacity: 0.7;
+}
+.trans80 {
+	filter:alpha(opacity=80);
+	-moz-opacity:0.8;
+	-khtml-opacity: 0.8;
+	opacity: 0.8;
+}
+
+ul.tablist li {
+  display: inline;
+  list-style-type: none;
+  margin-right: 10px;
+}
+ul.tablist li button {
+  border: none;
+}
+
+.tabbed  ul.tablist li.t1 button { background-color: #ddf; }
+.tabbed2 ul.tablist li.t2 button { background-color: #ddf; }
+.tabbed3 ul.tablist li.t3 button { background-color: #ddf; }
+.tabbed4 ul.tablist li.t4 button { background-color: #ddf; }
+
+.tabbed  div.t1 { display:block; }
+.tabbed  div.t2 { display:none; }
+.tabbed  div.t3 { display:none; }
+.tabbed  div.t4 { display:none; }
+.tabbed2 div.t1 { display:none; }
+.tabbed2 div.t2 { display:block; }
+.tabbed2 div.t3 { display:none; }
+.tabbed2 div.t4 { display:none; }
+.tabbed3 div.t1 { display:none; }
+.tabbed3 div.t2 { display:none; }
+.tabbed3 div.t3 { display:block; }
+.tabbed3 div.t4 { display:none; }
+.tabbed4 div.t1 { display:none; }
+.tabbed4 div.t2 { display:none; }
+.tabbed4 div.t3 { display:none; }
+.tabbed4 div.t4 { display:block; }
+
+
+

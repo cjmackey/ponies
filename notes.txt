@@ -1,0 +1,56 @@
+
+
+
+
+
+
+Quality
+
+Each time something is crafted, its quality is determined randomly.
+This is dependent on the user's skill.
+
+If qualities are integral (ie, integers), then it is conceivable that
+for every skill level, there is a probability for each quality level
+(and these would add up to 1.0).  Thus, when dealing with large
+stacks, it would be beneficial to first use a binomial distribution on
+the most probable outcome, then resize the population and renormalize
+the probabilities of the remaining qualities.
+
+A simpler method: make sure that the probabilities add up to 256, so
+that it fits into one byte to speed up the RNG.
+
+Even quicker: just map directly from random 4-bit number to quality
+(using an array).
+
+
+
+
+
+
+
+
+template grammar (wip) for http://pegjs.majda.cz/
+
+start
+  = templ
+
+templ
+  = "{" child:node "}" next:templ { return [child,next]; }
+  / m:[^{}]+ next:templ { if(typeof next === 'string'){return m.join('')+next} return [m.join(''),next];}
+  / ""
+
+node
+  = [ ]* head:nodeheader [ ]* "{" child:nodechild "}"  { var h = head; h.ctmpl = child; return h;}
+  / head:nodeheader [ ]* {return head}
+
+nodechild
+  = child:templ {return child;}
+
+nodeheader
+  = t1:taghead v:[A-z0-9.]+ [ ]* t2:taghead { return {tag:t1,varname:v.join(''),ctag:t2};}
+
+taghead
+  = "<" tname:[A-z]+ [ \t\n]* ">" [ \t\n]* { return tname.join('');}
+  / ""
+
+
